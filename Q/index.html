@@ -1,0 +1,193 @@
+<!-- index.html — ЗАМЕНИТЬ ЦЕЛИКОМ -->
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#05060f">
+<title>AURA//ARCADE</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305060f'/%3E%3Cpath d='M14 44L32 12L50 44Z' fill='none' stroke='%2322d3ee' stroke-width='4'/%3E%3Ccircle cx='32' cy='34' r='6' fill='%23ff2d95'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+<script defer src="js/core.js"></script>
+<script defer src="games/tanks/game.js"></script>
+<script defer src="games/shooter/game.js"></script>
+<script defer src="games/match3/game.js"></script>
+<script defer src="games/farm/game.js"></script>
+<script defer src="games/reflex/game.js"></script>
+<script defer src="js/app.js"></script>
+</head>
+<body data-quality="auto">
+<div class="world-bg"><div class="city"></div><div class="fog f1"></div><div class="fog f2"></div><div class="rain"></div><div class="gridfloor"></div></div>
+
+<nav class="nav">
+  <a class="brand" href="#/home" data-route="home"><span class="brand-mark">◈</span> AURA<b>//</b>ARCADE <span class="jp">夜街</span></a>
+  <div class="nav-links">
+    <a href="#/home" data-route="home">Главная</a>
+    <a href="#/catalog" data-route="catalog">Игры</a>
+    <a href="#/records" data-route="records">Рекорды</a>
+    <a href="#/profile" data-route="profile">Ник</a>
+  </div>
+  <div class="nav-act">
+    <span class="chip ok" id="serverChip">Сеть: —</span>
+    <button class="icon wide" id="musicBtn" title="Музыка">♫ Музыка</button>
+    <button class="icon" id="soundBtn" title="Звук">🔊</button>
+    <button class="icon" id="gearBtn" title="Эффекты">⚙</button>
+    <a class="nickchip" id="nickChip" href="#/profile" data-route="profile">Гость</a>
+    <button class="icon burger" id="burgerBtn">☰</button>
+  </div>
+</nav>
+<div class="mpanel" id="mobilePanel">
+  <a href="#/home" data-route="home">Главная</a>
+  <a href="#/catalog" data-route="catalog">Игры</a>
+  <a href="#/records" data-route="records">Рекорды</a>
+  <a href="#/profile" data-route="profile">Ник</a>
+</div>
+
+<div class="pop" id="settingsPop">
+  <h4>Эффекты · 演出</h4>
+  <label class="row"><span>Частицы<small>фон главной</small></span><input type="checkbox" id="swParticles"><i></i></label>
+  <label class="row"><span>Неон города<small>яркость свечения</small></span><input type="range" id="neonRange" min="0" max="100" value="70"></label>
+  <label class="row"><span>Качество<small>для слабого ПК</small></span><select id="selQuality"><option value="auto">Авто</option><option value="low">Спокойное</option><option value="med">Среднее</option><option value="high">Красивое</option></select></label>
+  <label class="row"><span>Звуки действий<small>клики, попадания</small></span><input type="checkbox" id="swSound"><i></i></label>
+  <label class="row"><span>Музыка<small>синтвейв-фон</small></span><input type="checkbox" id="swMusic"><i></i></label>
+  <label class="row"><span>Громкость музыки<small>тише — спокойнее</small></span><input type="range" id="musicVol" min="0" max="100" value="35"></label>
+  <label class="row"><span>FPS-метр<small>проверка плавности</small></span><input type="checkbox" id="swFps"><i></i></label>
+  <label class="row"><span>Меньше движения<small>убрать фоновые анимации</small></span><input type="checkbox" id="swMotion"><i></i></label>
+  <button class="btn ghost block" id="resetSettings">Сбросить эффекты</button>
+</div>
+
+<main>
+<section class="view active" id="view-home">
+  <div class="hero" id="heroSec">
+    <canvas id="heroCanvas"></canvas>
+    <div class="wrap hero-grid">
+      <div class="hero-copy" id="heroInner">
+        <span class="kicker" data-stag style="--i:0">ночная аркада · 夜街</span>
+        <h1 data-stag style="--i:1">AURA<span class="sl">//</span><br><span class="out">ARCADE</span></h1>
+        <p class="lead" data-stag style="--i:2">Неоновый квартал с мини-играми и фан-артом. Выбери ник — и рекорды сохранятся. Без почты, без паролей, без лишней возни.</p>
+        <div class="cta" data-stag style="--i:3">
+          <button class="btn" data-route="catalog">▶ Играть</button>
+          <button class="btn ghost" data-route="profile">Выбрать ник</button>
+        </div>
+        <div class="meta" data-stag style="--i:4"><span class="chip">🎮 мини-игры</span><span class="chip">🖼 фан-зона</span><span class="chip ok">🛡 честные рекорды</span></div>
+        <div class="lan-mini card" data-stag style="--i:5">
+          <div><b>Адрес для друга</b><span class="mono" id="lanHome">определяем адрес…</span></div>
+          <button class="btn ghost sm" id="copyLanHome">Скопировать</button>
+        </div>
+      </div>
+      <div class="emblem-box" id="emblemBox" data-stag style="--i:2">
+        <span class="kanji jp">闘</span>
+        <svg class="emblem" viewBox="0 0 400 400" aria-hidden="true">
+          <defs><radialGradient id="orbG"><stop offset="0%" stop-color="#fff"/><stop offset="35%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#ff2d95" stop-opacity="0"/></radialGradient><linearGradient id="gateG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#ff2d95"/></linearGradient></defs>
+          <circle class="spin" cx="200" cy="200" r="172" fill="none" stroke="rgba(34,211,238,.3)" stroke-dasharray="4 12"/>
+          <circle class="spin rev" cx="200" cy="200" r="146" fill="none" stroke="rgba(255,45,149,.25)" stroke-dasharray="70 46"/>
+          <ellipse cx="200" cy="338" rx="120" ry="12" fill="rgba(34,211,238,.12)"/>
+          <g fill="url(#gateG)"><path d="M84 138Q200 112 316 138L316 158Q200 134 84 158Z"/><rect x="108" y="176" width="184" height="12" rx="3"/><rect x="126" y="176" width="17" height="152" rx="4"/><rect x="257" y="176" width="17" height="152" rx="4"/></g>
+          <g class="orb"><circle cx="200" cy="252" r="46" fill="url(#orbG)"/><circle cx="200" cy="252" r="10" fill="#fff"/></g>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="marquee"><div class="mq" id="mqTrack"></div></div>
+  <div class="wrap sec">
+    <div class="sec-head"><h2><span class="idx">01</span>Фан-зона квартала</h2><span class="jp">ファン・ゾーン</span></div>
+    <div class="fan-grid" id="fanHome"></div>
+    <div class="note"><span>🖼</span><p><b>Хочешь настоящие гифки?</b> Положи файлы в папку <b>assets/fan/</b> с именами: levi.gif, bakugo.gif, jiangcheng.gif, maomao.gif, ironman.gif, spiderman.gif, harrydraco.gif. Они появятся автоматически. Пока там неон-постеры.</p></div>
+  </div>
+  <div class="wrap sec" style="padding-top:0">
+    <div class="sec-head"><h2><span class="idx">02</span>Топ ночи</h2><button class="btn ghost sm" data-route="records">Все рекорды →</button></div>
+    <div class="top-preview" id="homeTop"></div>
+  </div>
+</section>
+
+<section class="view" id="view-catalog">
+  <div class="wrap sec">
+    <div class="sec-head"><h2><span class="idx">01</span>Игры</h2><span class="jp">遊戯一覧</span></div>
+    <div class="toolbar">
+      <div class="search"><span>⌕</span><input id="catSearch" type="text" placeholder="Поиск игры…"></div>
+      <div class="chips" id="catChips"></div>
+      <select id="catSort"><option value="pop">По популярности</option><option value="alpha">По алфавиту</option><option value="mybest">Мой лучший</option></select>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+    <div class="empty" id="catEmpty" hidden><span class="jp">無</span>Игры не загрузились.<br><button class="btn ghost sm" id="catReset">Сбросить фильтры</button></div>
+    <div class="fan-strip" id="fanCatalog"></div>
+  </div>
+</section>
+
+<section class="view" id="view-game">
+  <div class="wrap">
+    <div class="game-head"><button class="btn ghost sm" data-route="catalog">← Назад</button><h2 id="gameTitle">—</h2><span class="jp" id="gameJp"></span><span class="chip" id="gameDiffTag" style="margin-left:auto"></span></div>
+    <div class="game-layout">
+      <div class="stage" id="gameStage">
+        <div class="hud-row"><div class="hud"><span id="hudAL">—</span><b id="hudAV">—</b></div><div class="hud"><span id="hudBL">—</span><b id="hudBV">—</b></div><div class="hud"><span id="hudCL">—</span><b id="hudCV">—</b></div></div>
+        <div class="canvas-wrap"><canvas id="gameCanvas" width="960" height="600"></canvas><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><div id="gameOverlay"></div></div>
+        <div class="touch-note" id="touchNote"></div>
+      </div>
+      <aside class="side">
+        <div class="card"><h4>Забег</h4><label class="lbl">Сложность</label><select id="diffSelect"><option value="0">Лёгкий</option><option value="1">Нормальный</option><option value="2">Хард</option></select><div class="ctrl"><button class="btn ghost sm" id="pauseBtn">⏸ Пауза</button><button class="btn sm" id="restartBtn">↻ Заново</button></div><button class="btn ghost sm block" id="gameSoundBtn">🔊 Звук</button><p class="mono dim" id="sessBadge">готов к старту</p></div>
+        <div class="card"><h4>Управление</h4><ul class="help" id="gameHelp"></ul></div>
+        <div class="card"><h4>Топ-5</h4><div id="miniBoard"></div></div>
+        <div class="fan-side" id="fanSide"></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="view-records">
+  <div class="wrap sec">
+    <div class="sec-head"><h2><span class="idx">02</span>Рекорды</h2><span class="jp">記録</span></div>
+    <div class="rec-tabs" id="recTabs"></div>
+    <div class="warnbar" id="recWarn"></div>
+    <div class="podium" id="recPodium"></div>
+    <div class="rec-tools"><div class="search"><span>⌕</span><input id="recSearch" type="text" placeholder="Поиск игрока…"></div><select id="recDiff"><option value="all">Любая сложность</option><option value="0">Лёгкий</option><option value="1">Нормальный</option><option value="2">Хард</option></select><select id="recSort"><option value="score">По счёту</option><option value="date">Свежие</option></select><span class="chip ok" id="recIntegrity">🛡 всё честно</span></div>
+    <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Игрок</th><th>Счёт</th><th>Сложность</th><th>Забег</th><th>Когда</th><th>Статус</th></tr></thead><tbody id="recBody"></tbody></table><div class="empty" id="recEmpty" hidden><span class="jp">空</span>Пока пусто — стань первым.</div></div>
+  </div>
+</section>
+
+<section class="view" id="view-profile">
+  <div class="wrap sec">
+    <div class="sec-head"><h2><span class="idx">03</span>Твой ник</h2><span class="jp">名前</span></div>
+    <div class="prof-grid">
+      <div class="card authcard">
+        <h3>Как тебя звать?</h3>
+        <p class="dim" style="margin-bottom:18px">Никакой почты и пароля. Просто ник — и рекорды будут твои.</p>
+        <form id="nickForm">
+          <div class="field"><label>Ник</label><input id="nickInput" type="text" maxlength="18" placeholder="например: Kage_04"></div>
+          <div class="err" id="nickErr"></div>
+          <button class="btn block" id="nickSave">Сохранить ник</button>
+        </form>
+        <div class="nick-status" id="nickStatus"></div>
+      </div>
+      <div class="card why">
+        <h3>Что сохраняется</h3>
+        <ul>
+          <li><span>🛡</span><div><b>Рекорды</b>Лучшие результаты в каждой игре.</div></li>
+          <li><span>📊</span><div><b>Статистика</b>Сколько забегов и сколько ауры набрано.</div></li>
+          <li><span>🔒</span><div><b>Привязка к устройству</b>Ник связан с этим браузером, без лишних данных.</div></li>
+        </ul>
+        <div class="lan-mini" style="margin-top:18px"><div><b>Адрес для друга</b><span class="mono" id="lanProfile">—</span></div><button class="btn ghost sm" id="copyLanProfile">Скопировать</button></div>
+      </div>
+    </div>
+    <div id="profileUser" hidden>
+      <div class="card prof-head"><div class="ava big" id="profAvatar"></div><div><h3 id="profNick">—</h3><p class="mono dim" id="profSince">—</p></div><button class="btn danger sm" id="wipeBtn">Удалить мои рекорды</button></div>
+      <div class="stat-grid"><div class="stat card"><b id="stRuns">0</b><span>забегов</span></div><div class="stat card"><b id="stRecords">0</b><span>рекордов</span></div><div class="stat card"><b id="stAura">0</b><span>аура ✦</span></div></div>
+      <div class="card"><h4 class="padh">Мои рекорды</h4><div id="profRecords"></div></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <span class="ghost jp">オーラ</span>
+  <div class="wrap f-grid">
+    <div><a class="brand" data-route="home">AURA<b>//</b>ARCADE</a><p>Ночной квартал: игры, фан-арт и спокойный неон.</p></div>
+    <div class="f-links"><div><h5>Квартал</h5><a data-route="catalog">Игры</a><a data-route="records">Рекорды</a><a data-route="profile">Ник</a></div><div><h5>Настройки</h5><button id="footSettings">Эффекты и звук</button></div></div>
+  </div>
+  <div class="wrap f-bottom"><span>© 2026 AURA//ARCADE</span><span>без попапов · без резких вспышек · <span class="jp">静寂</span></span></div>
+</footer>
+<div id="toasts"></div>
+<div id="fpsMeter">— FPS</div>
+<div id="errorBox" hidden></div>
+<noscript><div style="padding:100px 24px;text-align:center">Для аркады нужен включённый JavaScript.</div></noscript>
+</body>
+</html>
